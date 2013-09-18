@@ -27,10 +27,12 @@ package com.dreamana.pseudo3d
 		
 		/** 
 		 * Converts a 3D point in Dimetric space to 2D screen position, screenZ for z-sorting
-		 * @param p	the position in 3D space
+		 * @param x
+		 * @param y
+		 * @param z
 		 * @return 
 		 */		
-		public static function fromSpace(x:Number, y:Number, z:Number):Point3D
+		public static function fromWorld(x:Number, y:Number, z:Number):Point3D
 		{
 			var screenX:Number = x - z;
 			var screenY:Number = y * Y_CORRECT + (x + z) * .5;
@@ -40,14 +42,43 @@ package com.dreamana.pseudo3d
 		
 		/**
 		 * Converts a 2D screen position to a 3D point in Dimetric space, assuming y = 0.
+		 * @param screenX
+		 * @param screenY
 		 * @return 
 		 */		
-		public static function fromPlane(screenX:Number, screenY:Number):Point3D
+		public static function fromScreen(screenX:Number, screenY:Number):Point3D
 		{
 			var x:Number = screenY + screenX * .5;
-			//var y:Number = 0;
+			var y:Number = 0;
 			var z:Number = screenY - screenX * .5;
-			return new Point3D(x, 0, z);
+			return new Point3D(x, y, z);
+		}
+		
+		
+		public static function worldToScreen(world:Point3D, result:Point3D):void
+		{
+			var x:Number = world.x;
+			var y:Number = world.y;
+			var z:Number = world.z;
+			
+			var screenX:Number = x - z;
+			var screenY:Number = y * Y_CORRECT + (x + z) * .5;
+			var screenZ:Number = (x + z) * .866 - y * .707;		
+			
+			result.reset(screenX, screenY, screenZ);
+		}
+		
+		public static function screenToWorld(screen:Point3D, result:Point3D):void
+		{
+			var screenX:Number = screen.x;
+			var screenY:Number = screen.y;
+			var screenZ:Number = screen.z;
+			
+			var x:Number = screenY + screenX * .5;
+			var y:Number = 0;
+			var z:Number = screenY - screenX * .5;
+			
+			result.reset(x, y, z);
 		}
 	}
 }

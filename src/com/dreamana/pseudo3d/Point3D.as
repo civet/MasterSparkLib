@@ -12,5 +12,17 @@ package com.dreamana.pseudo3d
 			this.y = y;
 			this.z = z;
 		}
+		
+		public function reset(x:Number=0.0, y:Number=0.0, z:Number=0.0):void
+		{
+			this.x = x;
+			this.y = y;
+			this.z = z;
+		}
+		
+		public function toString():String
+		{
+			return "(x=" + this.x + ", y=" + this.y + ", z=" + this.z + ")";
+		}
 	}
 }

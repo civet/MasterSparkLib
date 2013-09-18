@@ -4,10 +4,16 @@ package com.dreamana.pseudo3d
 	
 	public class ZSorter
 	{
-		public static var sortField:String = "z";
-		public static var elementField:String = "display";
+		public var sortField:String = "z";
+		public var elementField:String = "display";
 		
-		public static function sort(container:DisplayObjectContainer, objects:Array):void
+		public function ZSorter(sortField:String="z", elementField:String="display")
+		{
+			this.sortField = sortField;
+			this.elementField = elementField;
+		}
+		
+		public function sort(container:DisplayObjectContainer, objects:Array):void
 		{
 			//TODO: a faster sorting function?
 			objects.sortOn(sortField, Array.NUMERIC);
