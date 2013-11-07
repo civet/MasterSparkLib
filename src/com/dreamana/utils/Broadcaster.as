@@ -13,7 +13,6 @@ package com.dreamana.utils
 	{
 		protected var _listeners:Array = [];
 		protected var _once:Array = [];
-		protected var _hash:Dictionary = new Dictionary();
 		
 		
 		public function Broadcaster()
@@ -42,13 +41,13 @@ package com.dreamana.utils
 		public function add(listener:Function, oneshot:Boolean=false):void
 		{
 			//if exist, do nothing (cannot change its priority)
-			if(_hash[ listener ] != undefined && _hash[ listener ] > -1) return;
+			var i:int = _listeners.indexOf(listener);
+			if(i != -1) return;
 			
-			var i:int = _listeners.length;
+			i = _listeners.length;
 			
 			_listeners[ i ] = listener;
 			_once[ i ] = oneshot;
-			_hash[ listener ] = i;
 		}
 			
 		/**
@@ -63,13 +62,11 @@ package com.dreamana.utils
 		public function remove(listener:Function):void
 		{
 			//if not exist, do nothing.
-			var i:int = (_hash[ listener ] != undefined) ? _hash[ listener ] : -1;
-			
-			if(i < 0) return; 
-					
+			var i:int = _listeners.indexOf(listener);
+			if(i == -1) return; 
+				
 			_listeners[ i ] = null;
 			_once[ i ] = false;
-			_hash[ listener ] = -1;
 		}
 		
 		public function addOnce(listener:Function):void
@@ -85,7 +82,6 @@ package com.dreamana.utils
 				
 				_listeners[ i ] = null;
 				_once[ i ] = false;
-				_hash[ listener ] = -1;
 			}
 		}
 		
@@ -127,7 +123,7 @@ package com.dreamana.utils
 				if(listener == null) {
 					_listeners.splice(i, 1);
 					_once.splice(i, 1);
-					delete _hash[ listener ];
+					//delete _hash[ listener ];//BUG: indexes changed in array when removing but hash
 				}
 			}
 		}
